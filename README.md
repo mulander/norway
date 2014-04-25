@@ -19,7 +19,7 @@ Then open your browser to:
 
 In order to use the CVS interop features in your code just:
 
-`import "github.com/mulander/norway"
+`import "github.com/mulander/norway"`
 
 status
 ------
