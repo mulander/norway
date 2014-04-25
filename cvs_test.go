@@ -68,8 +68,8 @@ func TestParseEntryFileWithOptions(t *testing.T) {
 			Convey("FileName should match some_file.c", func() {
 				So(entry.FileName, ShouldEqual, "some_file.c")
 			})
-			Convey("Revision should match 1.24", func() {
-				So(entry.Revision, ShouldEqual, "1.24")
+			Convey("Revision should match 10.24", func() {
+				So(entry.Revision, ShouldEqual, "10.24")
 			})
 			Convey("Timestamp should match Fri Apr 11 08:17:05 2014", func() {
 				So(entry.Timestamp, ShouldEqual, "Fri Apr 11 08:17:05 2014")
