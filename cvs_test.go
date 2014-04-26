@@ -1,6 +1,7 @@
 package norway
 
 import (
+	"strings"
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -145,6 +146,66 @@ func TestParseEntryDirectory(t *testing.T) {
 			})
 			Convey("Tagdate should be an empty string", func() {
 				So(entry.Tagdate, ShouldEqual, "")
+			})
+		})
+	})
+}
+
+func TestParseEntries(t *testing.T) {
+	Convey("Given an Entries file", t, func() {
+		entriesFile := "/bio_ssl.c/1.14/Mon Apr 21 16:34:43 2014//\n" +
+			"/d1_both.c/1.12/Thu Apr 24 15:50:02 2014//\n" +
+			"/d1_clnt.c/1.16/Wed Apr 23 22:26:26 2014//\n" +
+			"/d1_enc.c/1.3/Mon Apr 14 14:16:33 2014//\n" +
+			"/d1_lib.c/1.12/Sun Apr 20 14:14:52 2014//\n" +
+			"/d1_meth.c/1.3/Sat Apr 19 08:52:32 2014//\n" +
+			"/d1_pkt.c/1.16/Wed Apr 23 18:40:39 2014//\n" +
+			"/d1_srtp.c/1.3/Sat Apr 19 08:52:32 2014//\n" +
+			"/d1_srvr.c/1.18/Wed Apr 23 05:13:57 2014//\n" +
+			"D\n\n"
+		Convey("When the file is parsed", func() {
+			entries, err := ParseEntries(strings.NewReader(entriesFile))
+			Convey("That the file was parsed without errors", func() {
+				So(err, ShouldBeNil)
+			})
+			Convey("bio_ssl.c is at revision 1.14", func() {
+				So(entries["bio_ssl.c"].Revision, ShouldEqual, "1.14")
+			})
+			Convey("d1_enc.c is at revision 1.3", func() {
+				So(entries["d1_enc.c"].Revision, ShouldEqual, "1.3")
+			})
+			Convey("d1_meth.c timestamp is Sat Apr 19 08:52:32 2014", func() {
+				So(entries["d1_meth.c"].Timestamp, ShouldEqual, "Sat Apr 19 08:52:32 2014")
+			})
+		})
+	})
+}
+
+func TestParseEntriesCRLF(t *testing.T) {
+	Convey("Given an Entries file", t, func() {
+		entriesFile := "/bio_ssl.c/1.14/Mon Apr 21 16:34:43 2014//\r\n" +
+			"/d1_both.c/1.12/Thu Apr 24 15:50:02 2014//\r\n" +
+			"/d1_clnt.c/1.16/Wed Apr 23 22:26:26 2014//\r\n" +
+			"/d1_enc.c/1.3/Mon Apr 14 14:16:33 2014//\r\n" +
+			"/d1_lib.c/1.12/Sun Apr 20 14:14:52 2014//\r\n" +
+			"/d1_meth.c/1.3/Sat Apr 19 08:52:32 2014//\r\n" +
+			"/d1_pkt.c/1.16/Wed Apr 23 18:40:39 2014//\r\n" +
+			"/d1_srtp.c/1.3/Sat Apr 19 08:52:32 2014//\r\n" +
+			"/d1_srvr.c/1.18/Wed Apr 23 05:13:57 2014//\r\n" +
+			"D\r\n\r\n"
+		Convey("When the file is parsed", func() {
+			entries, err := ParseEntries(strings.NewReader(entriesFile))
+			Convey("That the file was parsed without errors", func() {
+				So(err, ShouldBeNil)
+			})
+			Convey("bio_ssl.c is at revision 1.14", func() {
+				So(entries["bio_ssl.c"].Revision, ShouldEqual, "1.14")
+			})
+			Convey("d1_enc.c is at revision 1.3", func() {
+				So(entries["d1_enc.c"].Revision, ShouldEqual, "1.3")
+			})
+			Convey("d1_meth.c timestamp is Sat Apr 19 08:52:32 2014", func() {
+				So(entries["d1_meth.c"].Timestamp, ShouldEqual, "Sat Apr 19 08:52:32 2014")
 			})
 		})
 	})

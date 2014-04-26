@@ -1,8 +1,12 @@
 package norway
 
 import (
+	"bufio"
+	"io"
 	"strings"
 )
+
+type Entries map[string]Entry
 
 type Entry struct {
 	IsDirectory bool
@@ -34,4 +38,17 @@ func ParseEntry(entryLine string) Entry {
 	newEntry.Tagdate = fields[5]
 
 	return newEntry
+}
+
+func ParseEntries(r io.Reader) (Entries, error) {
+	entries := Entries{}
+	scanner := bufio.NewScanner(r)
+	for scanner.Scan() {
+		entry := ParseEntry(scanner.Text())
+		entries[entry.FileName] = entry
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+	return entries, nil
 }
