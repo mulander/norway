@@ -2,14 +2,17 @@ package main
 
 import (
 	"flag"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/mulander/norway"
 )
 
+var basePath string
 var cvs norway.Entries
 
 func Init(cvsPath string) {
@@ -25,15 +28,30 @@ func Init(cvsPath string) {
 	}
 }
 
+func Handler(rw http.ResponseWriter, req *http.Request) {
+	data := struct {
+		Entries norway.Entries
+	}{
+		cvs,
+	}
+	t, err := template.ParseFiles(filepath.Join(basePath, "templates", "root.html"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	t.Execute(rw, data)
+}
+
 func main() {
 	httpListen := flag.String("http", "127.0.0.1:8080", "host:port to listen on")
-	// basePath := flag.String("base", ".", "base path for web interface templates and static resources")
+	flag.StringVar(&basePath, "base", ".", "base path for web interface templates and static resources")
 	cvsPath := flag.String("cvs", ".", "path to the cvs repository checkout")
 	flag.Parse()
 
 	// http.Handle("/static/", http.FileServer(http.Dir(*basePath)))
 
 	Init(*cvsPath)
+
+	http.HandleFunc("/", Handler)
 
 	if strings.HasPrefix(*httpListen, "127.0.0.1") ||
 		strings.HasPrefix(*httpListen, "localhost") {

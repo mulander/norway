@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ 	<title></title>
+ </head>
+ <body>
+ 	<div id="Content">
+ 		{{range .Entries}}
+ 		<div class="commit">
+ 			<h2>{{.FileName}}</h2>
+ 			<div class="metadata">
+ 			  {{.Revision}} - {{.Timestamp}}
+ 			</div>
+ 			<div class="message">
+ 			</div>
+ 			<div class="summary">
+ 			</div>
+ 		</div>
+ 		{{end}}
+ 	</div>
+ </body>
+</html>
