@@ -9,6 +9,18 @@ import (
 	"time"
 )
 
+type RevisionSorted []*Revision
+
+type Revision struct {
+	FileName string
+	Version  string
+	Date     string
+	Author   string
+	State    string
+	Lines    string
+	Branches string
+	Message  string
+}
 
 type EntriesSorted []Entry
 
