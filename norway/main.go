@@ -30,9 +30,9 @@ func Init(cvsPath string) {
 
 func Handler(rw http.ResponseWriter, req *http.Request) {
 	data := struct {
-		Entries norway.Entries
+		Entries norway.EntriesSorted
 	}{
-		cvs,
+		cvs.SortedByTimestamp(),
 	}
 	t, err := template.ParseFiles(filepath.Join(basePath, "templates", "root.html"))
 	if err != nil {
