@@ -24,7 +24,7 @@ In order to use the CVS interop features in your code just:
 status
 ------
 
-In active development and maintained. Bugs/feature request reported on the github issue tracker will be actively fixed.
+Development on hold. Bugs/feature request should be reported on the github issue tracker.
 
 testing
 -------
